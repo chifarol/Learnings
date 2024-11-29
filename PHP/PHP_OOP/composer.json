@@ -1,0 +1,16 @@
+{
+  "name": "chifarol/php_oop",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "Chifarol\\PhpOOP\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Ilodigwe Chinaza",
+      "email": "ilodigwechinaza@gmail.com"
+    }
+  ],
+  "require": {}
+}

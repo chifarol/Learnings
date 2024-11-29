@@ -1,0 +1,20 @@
+{
+  "name": "laravel-tutorials",
+  "version": "1.0.0",
+  "description": "here I document noteworthy lessons from laravel books and tutorials",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "push": "git add * && git commit -m 'update' && git push origin master"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chifarol/laravel-tutorials.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chifarol/laravel-tutorials/issues"
+  },
+  "homepage": "https://github.com/chifarol/laravel-tutorials#readme"
+}
