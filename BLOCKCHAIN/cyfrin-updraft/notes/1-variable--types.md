@@ -1,0 +1,3 @@
+<!-- @format -->
+
+## Variable Types

@@ -3,4 +3,4 @@
 # Book Details
 
 Book Author: Matt Stauffer
-Book Title: Laravel Up & Running (3rd Edition)
+Book Title: THE BLOCKCHAIN DEVELOPER (3rd Edition)
