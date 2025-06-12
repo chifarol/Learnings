@@ -59,7 +59,7 @@ There are four ways to pass data into components:
 
    ```html
    <?php 
-     $width = 50; 
+     $width = 50;  
    ?>
    <!-- Passing the data in -->
    <x-modal title="Title here yay" :width="$width" />
