@@ -101,7 +101,7 @@ https://netshopisp.medium.com/how-to-install-nginx-mysql-php-on-ubuntu-22-04-lem
 
 ## Setup MySQL & Adminer
 
-1. Download adminer script at https://www.adminer.org/
+1. Download adminer script at https://www.adminer.org/ apt-get install adminer
 2. Upload it to /var/www/db, you can rename it to index.php (mv adminer.php db/index.php)
 3. Configure nginx server block
 
@@ -111,28 +111,25 @@ nano /etc/nginx/sites-available/db
 
 ```
 server {
-    listen 80;
-    listen [::]:80;
-    server_name domain.ng www.domain.ng;
+   server_name db.mobirevo.com;  # Replace with your domain or IP address
+      root /usr/share/adminer;  # Adminer's root directory
+      index adminer.php;
 
-    access_log     /var/log/nginx/admin.access.log;
-    error_log      /var/log/nginx/admin.error.log;
+      access_log     /var/log/nginx/admin.access.log;
+      error_log      /var/log/nginx/admin.error.log;
 
+      location / {
+        try_files $uri $uri/ =404;
+      }
 
-    root /var/www/db/;
-    index index.php index.htm index.html;
-
-    location ~ \.php$ {
-        include snippets/fastcgi-php.conf;
+      location ~ \.php$ {
+          include snippets/fastcgi-php.conf;
         fastcgi_pass unix:/var/run/php/php-fpm.sock;
-     }
+      }
 
-    location ~ /\.ht {
-        deny all;
-    }
-    location / {
-                try_files $uri $uri/ =404;
-         }
+      location /adminer {
+        alias /usr/share/adminer;
+      }
 }
 
 ```
@@ -146,8 +143,8 @@ sudo ln -s /etc/nginx/sites-available/db /etc/nginx/sites-enabled/db
 4. Create User and assign password
 
 ```
-CREATE USER 'wpuser'@'localhost' IDENTIFIED BY 'M83Re930?#yx';
-GRANT ALL PRIVILEGES ON *.* TO 'wpuser'@localhost IDENTIFIED BY 'M83Re930?#yx';
+CREATE USER 'puser'@'localhost' IDENTIFIED BY 'M83Re930?#yx';
+GRANT ALL PRIVILEGES ON *.* TO 'puser'@localhost IDENTIFIED BY 'M83Re930?#yx';
 FLUSH PRIVILEGES;
 ```
 
@@ -321,13 +318,12 @@ sudo ln -s /etc/nginx/sites-available/api /etc/nginx/sites-enabled/api
 
 ```
 server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
-        root /var/www/test/dist;
+
+        root /var/www/usemonnee.com/quickrpay-landing-page/dist;
         # Add index.php to the list if you are using PHP
         index index.html index.htm index.nginx-debian.html;
 
-        server_name _;
+        server_name usemonnee.com;
 
         location / {
                  # as directory, then fall back to displaying a 404.
@@ -339,7 +335,7 @@ server {
 3. Link sites-available to sites enabled
 
 ```
-    sudo ln -s etc/nginx/sites-available/db /etc/nginx/sites-enabled/db
+    sudo ln -s etc/nginx/sites-available/usemonnee.com /etc/nginx/sites-enabled/usemonnee.com
 ```
 
 4. Restart server
@@ -398,7 +394,7 @@ server {
 3. Link sites-available to sites enabled
 
 ```
-    sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+    sudo ln -s /etc/nginx/sites-available/app.mobirevo.com /etc/nginx/sites-enabled/app.mobirevo.com
 ```
 
 4. Restart server
@@ -423,3 +419,26 @@ sudo certbot --nginx -d domainname.com -d www.domainname.com
 ## Setup Wordpress
 
 https://www.digitalocean.com/community/tutorials/install-wordpress-nginx-ubuntu
+
+## Block Bots
+
+in robots.txt at root directory e.g /var/www/html
+
+```
+User-agent: *
+Disallow: /
+```
+
+in Nginx server block
+
+```
+    set $block_bot 0;
+
+    if ($http_user_agent ~* (googlebot|bingbot|slurp|baiduspider|yandex|sogou|exabot|facebookexternalhit|facebot|ia_archiver)) {
+        set $block_bot 1;
+    }
+
+    if ($block_bot = 1) {
+        return 403;
+    }
+```
