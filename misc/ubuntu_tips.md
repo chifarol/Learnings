@@ -22,3 +22,9 @@ df -h, which only displays the free and used space on my disks.
 
 du -hs /path
 ```
+
+## Check Memory Usage
+
+```
+watch -n 5 free -m
+```

@@ -207,7 +207,7 @@ sudo chown -R www-data:www-data /var/www/api/bootstrap/cache
 5. Configure nginx server
 
 ```
-sudo nano /etc/nginx/sites-available/api
+sudo nano /etc/nginx/sites-available/moduverse-backend-test
 sudo ln -s /etc/nginx/sites-available/api /etc/nginx/sites-enabled/api
 ```
 
@@ -394,7 +394,7 @@ server {
 3. Link sites-available to sites enabled
 
 ```
-    sudo ln -s /etc/nginx/sites-available/app.mobirevo.com /etc/nginx/sites-enabled/app.mobirevo.com
+    sudo ln -s /etc/nginx/sites-available/moduverse-backend-test /etc/nginx/sites-enabled/moduverse-backend-test
 ```
 
 4. Restart server
@@ -415,6 +415,8 @@ sudo apt install nginx certbot python3-certbot-nginx
 ```
 sudo certbot --nginx -d domainname.com -d www.domainname.com
 ```
+
+sudo certbot --nginx -d blog-test.moduverse.co -d api.moduverse.co -d api-test.moduverse.co -d admin.moduverse.co -d admin-test.moduverse.co
 
 ## Setup Wordpress
 
@@ -442,3 +444,30 @@ in Nginx server block
         return 403;
     }
 ```
+
+server {
+server_name moduverse-test.co;
+
+    gzip on;
+    gzip_proxied any;
+    gzip_types  application/javascript application/x-javascript text/css text/javascript;
+    gzip_comp_level 5;
+    gzip_buffers 16 8k;
+    gzip_min_length 256;
+
+        location /_next/static/ {
+            alias /var/www/moduverse/blog-test/.next/static/;
+            expires 365d;
+            access_log off;
+    }
+
+    location / {
+            proxy_pass http://127.0.0.1:3000; #change ports for second app i.e. 3001,3002
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+    }
+
+}
